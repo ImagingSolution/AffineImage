@@ -82,42 +82,42 @@ namespace AffineImage
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void picImage_MouseMove(object sender, MouseEventArgs e)
-        {
-            // マウスをクリックしながら移動中のとき、画像の移動
-            if (_mouseDownFlg == true)
-            {
-                // 画像の移動
-                _matAffine.Translate(e.X - _oldPoint.X, e.Y - _oldPoint.Y,
-                    System.Drawing.Drawing2D.MatrixOrder.Append);
-                // 画像の描画
-                RedrawImage();
+private void picImage_MouseMove(object sender, MouseEventArgs e)
+{
+    // マウスをクリックしながら移動中のとき、画像の移動
+    if (_mouseDownFlg == true)
+    {
+        // 画像の移動
+        _matAffine.Translate(e.X - _oldPoint.X, e.Y - _oldPoint.Y,
+            System.Drawing.Drawing2D.MatrixOrder.Append);
+        // 画像の描画
+        RedrawImage();
 
-                // ポインタ位置の保持
-                _oldPoint.X = e.X;
-                _oldPoint.Y = e.Y;
-            }
+        // ポインタ位置の保持
+        _oldPoint.X = e.X;
+        _oldPoint.Y = e.Y;
+    }
 
-            ////////////////////////////
-            // マウスポインタの座標と画像の座標を表示する
+    ////////////////////////////
+    // マウスポインタの座標と画像の座標を表示する
 
-            // マウスポインタの座標
-            lblMousePointer.Text = $"Mouse {e.Location}";
+    // マウスポインタの座標
+    lblMousePointer.Text = $"Mouse {e.Location}";
 
-            // アフィン変換行列（画像座標→ピクチャボックス座標）の逆行列(ピクチャボックス座標→画像座標)を求める
-            // Invertで元の行列が上書きされるため、Cloneを取ってから逆行列
-            var invert = _matAffine.Clone();
-            invert.Invert();
+    // アフィン変換行列（画像座標→ピクチャボックス座標）の逆行列(ピクチャボックス座標→画像座標)を求める
+    // Invertで元の行列が上書きされるため、Cloneを取ってから逆行列
+    var invert = _matAffine.Clone();
+    invert.Invert();
 
-            var pf = new PointF[] { e.Location };
+    var pf = new PointF[] { e.Location };
 
-            // ピクチャボックス座標を画像座標に変換する
-            invert.TransformPoints(pf);
+    // ピクチャボックス座標を画像座標に変換する
+    invert.TransformPoints(pf);
 
-            // 画像の座標
-            lblImagePointer.Text = $"Image {pf[0]}";
+    // 画像の座標
+    lblImagePointer.Text = $"Image {pf[0]}";
 
-        }
+}
 
         private void picImage_MouseUp(object sender, MouseEventArgs e)
         {
@@ -149,11 +149,8 @@ namespace AffineImage
                 else
                 {
                     // 拡大
-                    if (_matAffine.Elements[0] < 100)  // X方向の倍率を代表してチェック
-                    {
-                        // ポインタの位置周りに拡大
-                        _matAffine.ScaleAt(1.5f, e.Location);
-                    }
+                    // ポインタの位置周りに拡大
+                    _matAffine.ScaleAt(1.5f, e.Location);
                 }
             }
             else
@@ -166,11 +163,8 @@ namespace AffineImage
                 else
                 {
                     // 縮小
-                    if (_matAffine.Elements[0] > 0.01)  // X方向の倍率を代表してチェック
-                    {
-                        // ポインタの位置周りに縮小
-                        _matAffine.ScaleAt(1.0f / 1.5f, e.Location);
-                    }
+                    // ポインタの位置周りに縮小
+                    _matAffine.ScaleAt(1.0f / 1.5f, e.Location);
                 }
             }
             // 画像の描画
